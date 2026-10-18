@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Event Registration</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+  <style>
+    body {
+      background: #f1f3f9;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+    }
+
+    .registration-card {
+      max-width: 560px;
+      margin: 45px auto;
+      border: none;
+      border-radius: 18px;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.09);
+    }
+
+    .event-heading {
+      color: #5143b5;
+      font-weight: bold;
+    }
+
+    .btn-main {
+      background: #5143b5;
+      color: white;
+    }
+
+    .btn-main:hover {
+      background: #3d3290;
+      color: white;
+    }
+
+    #message {
+      display: none;
+    }
+
+    #source-section {
+      margin-top: 50px;
+      padding: 24px;
+      background: #171923;
+      color: #e4e7ef;
+    }
+
+    #source-code {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <section class="card registration-card">
+      <div class="card-body p-4 p-md-5">
+
+        <h1 id="eventHeading" class="event-heading h2">
+          Student Event Registration
+        </h1>
+
+        <p class="text-secondary">
+          Register for a university event and explore new skills.
+        </p>
+
+        <button type="button" id="instructionsButton"
+                class="btn btn-outline-secondary btn-sm mb-3">
+          Show / Hide Instructions
+        </button>
+
+        <div id="instructions" class="alert alert-info">
+          Enter your name and email, select an event, and click Register.
+          Your details will not be sent to a server.
+        </div>
+
+        <form id="registrationForm" novalidate>
+          <div class="mb-3">
+            <label for="studentName" class="form-label">
+              Student Name
+            </label>
+            <input type="text" id="studentName"
+                   class="form-control"
+                   placeholder="Enter your full name">
+          </div>
+
+          <div class="mb-3">
+            <label for="studentEmail" class="form-label">
+              Email Address
+            </label>
+            <input type="email" id="studentEmail"
+                   class="form-control"
+                   placeholder="student@example.com">
+          </div>
+          <div class="mb-3">
+            <label for="eventSelect" class="form-label">
+              Select Event
+            </label>
+            <select id="eventSelect" class="form-select">
+              <option value="Web Development Workshop">
+                Web Development Workshop
+              </option>
+              <option value="Cybersecurity Seminar">
+                Cybersecurity Seminar
+              </option>
+              <option value="AI Innovation Day">
+                AI Innovation Day
+              </option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-main w-100">
+            Register Now
+          </button>
+        </form>
+        <div id="message" class="alert mt-3" role="status"
+             aria-live="polite"></div>
+        <hr>
+        <button type="button" id="colorButton"
+                class="btn btn-outline-primary btn-sm">
+          Change Heading Color
+        </button>
+        <button type="button" id="addEventButton"
+                class="btn btn-outline-dark btn-sm mt-2">
+          Add Selected Event to List
+        </button>
+        <h2 class="h5 mt-4">My Event List</h2>
+        <ul id="eventList" class="list-group">
+          <li class="list-group-item">No events added yet.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+  <!-- Required source-code section -->
+  <section id="source-section" class="container-fluid">
+    <h2 class="h4">Complete Source Code</h2>
+    <p>
+      This section displays the code used to create this component.
+    </p>
+    <pre id="source-code">Loading source code...</pre>
+  </section>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <script>
+    // JavaScript: validate inputs and display a message
+    document.getElementById("registrationForm")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const name = document.getElementById("studentName")
+          .value.trim();
+        const email = document.getElementById("studentEmail")
+          .value.trim();
+        const selectedEvent = document.getElementById("eventSelect")
+          .value;
+        const message = document.getElementById("message");
+
+        if (name === "" || email === "") {
+          message.className = "alert alert-danger mt-3";
+          message.textContent =
+            "Please enter your name and email address.";
+          message.style.display = "block";
+          return;
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          message.className = "alert alert-danger mt-3";
+          message.textContent = "Please enter a valid email address.";
+          message.style.display = "block";
+          return;
+        }
+
+        message.className = "alert alert-success mt-3";
+        message.textContent =
+          "Thank you, " + name + "! You selected " + selectedEvent + ".";
+        message.style.display = "block";
+      });
+
+    // JavaScript: change the heading color
+    document.getElementById("colorButton")
+      .addEventListener("click", function () {
+        const heading = document.getElementById("eventHeading");
+
+        heading.style.color =
+          heading.style.color === "rgb(220, 53, 69)"
+            ? "#5143b5"
+            : "#dc3545";
+      });
+
+    // jQuery: show or hide instructions
+    $("#instructionsButton").click(function () {
+      $("#instructions").slideToggle();
+    });
+
+    // jQuery: mouseover event changes heading appearance
+    $("#eventHeading").mouseover(function () {
+      $(this).css("letter-spacing", "1px");
+    });
+
+    $("#eventHeading").mouseout(function () {
+      $(this).css("letter-spacing", "0");
+    });
+
+    // jQuery: add the selected event to the displayed list
+    $("#addEventButton").click(function () {
+      const selectedEvent = $("#eventSelect").val();
+
+      // Remove the placeholder when adding the first event
+      $("#eventList .placeholder").remove();
+
+      if ($("#eventList .event-item").length === 0) {
+        $("#eventList").empty();
+      }
+
+      $("<li>")
+        .addClass("list-group-item event-item")
+        .text(selectedEvent)
+        .hide()
+        .appendTo("#eventList")
+        .fadeIn(400);
+    });
+
+    // Display the actual source file at the bottom of the page
+    fetch(window.location.pathname)
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("Could not load source file.");
+        }
+        return response.text();
+      })
+      .then(function (source) {
+        document.getElementById("source-code").textContent = source;
+      })
+      .catch(function () {
+        document.getElementById("source-code").textContent =
+          "Source code could not be loaded. Please check the deployed page.";
+      });
+  </script>
+</body>
+</html>
